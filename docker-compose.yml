@@ -1,0 +1,22 @@
+version: "3.9"
+
+services:
+  opryscrape:
+    image: opryscrape/app
+    build: .
+    ports:
+    - 8080:8080
+    environment:
+      DATABASE_PATH: "/app/data/opry.db"
+      DB_BATCH_SIZE: 30
+      FLUSH_SECONDS: 60
+      PORT: 8080
+    volumes:
+    - ./data:/app/data
+
+  test:
+    build:
+      context: .
+      target: build
+    working_dir: /src
+    command: go test ./... -v
