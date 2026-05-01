@@ -1,13 +1,12 @@
 OpryScrape
 
-Trying to see Brad Paisley or Reba (for Sam)
+Purpose(s) of this scraper:
+1. Keep learning about Effective Go (specifically concurrency) and Software Engineering design principles
+2. Keep track of who is coming to the Opry so that I can watch for people of interest
 
 What is the Opry: 
 A radio show that happens in Nashville ~250 times per year. Every show has 5-8 artists/groups that perform 3-5 songs. Shows are announced well before they announce the performers. It is common for the "big" name acts to not be linked to a show until a week or two before the show happens.
 
-Purpose(s) of this scraper:
-1. Mostly fun, building a pet project to keep learning about Effective Go and Software Engineering
-2. Keep track of who is coming to the Opry so that I can watch for people of interest
 
 Three scripts:
 build - ./scripts/build
