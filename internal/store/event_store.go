@@ -51,7 +51,7 @@ func (es *EventStore) LoadFromDB(db *sql.DB) error {
     for rows.Next() {
         var e models.Event
 		var timeStr string
-        if err := rows.Scan(&e.Id, &e.Link, &e.Title, timeStr, &e.NoOfPerformers); err != nil {
+        if err := rows.Scan(&e.Id, &e.Link, &e.Title, &timeStr, &e.NoOfPerformers); err != nil {
             return err
         }
 
