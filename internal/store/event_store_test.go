@@ -60,7 +60,7 @@ func TestAddEvent_DuplicateLink(t *testing.T) {
 	assert.Len(t, es.newEventsCh, 1)
 }
 
-func TestLoadFromDB_EmptyTable(t *testing.T) {
+func TestEventLoadFromDB_EmptyTable(t *testing.T) {
 	db := setupTestDB(t)
 	es := NewEventStore()
 
@@ -69,7 +69,7 @@ func TestLoadFromDB_EmptyTable(t *testing.T) {
 	assert.Empty(t, es.EventMap)
 }
 
-func TestLoadFromDB_PopulatesMap(t *testing.T) {
+func TestEventLoadFromDB_PopulatesMap(t *testing.T) {
 	db := setupTestDB(t)
 	now := time.Now().UTC().Truncate(time.Second)
 
@@ -212,7 +212,7 @@ func TestInsertEventsToDb_AllBadEvents(t *testing.T) {
 	assert.Equal(t, 2, count)
 }
 
-func TestLoadFromDB_SkipsBadTime(t *testing.T) {
+func TestEventLoadFromDB_SkipsBadTime(t *testing.T) {
 	db := setupTestDB(t)
 	now := time.Now().UTC().Truncate(time.Second)
 

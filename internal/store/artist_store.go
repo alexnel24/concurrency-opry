@@ -17,7 +17,7 @@ type ArtistStore struct {
 func NewArtistStore() *ArtistStore {
 	return &ArtistStore{
 		artistMap: make(map[string]*models.Artist),
-		newArtistsCh: make(chan *models.Artist),
+		newArtistsCh: make(chan *models.Artist, 100),
 	}
 }
 

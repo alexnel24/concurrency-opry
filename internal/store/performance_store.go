@@ -17,7 +17,7 @@ type PerformanceStore struct {
 func NewPerformanceStore() *PerformanceStore {
 	return &PerformanceStore{
 		performanceMap: make(map[string]*models.Performance),
-		newPerformancesCh: make(chan *models.Performance),
+		newPerformancesCh: make(chan *models.Performance, 100),
 	}
 }
 
