@@ -90,12 +90,20 @@ func (as *ArtistStore) InsertArtistsToDb(db *sql.DB, newArtists []*models.Artist
     for _, a := range newArtists {
         result, err := stmt.Exec(a.Name)
         if err != nil {
-            return err
+            fmt.Println("Error on Artist name: ", a.Name)
+            as.mu.Lock()
+            delete(as.artistMap, a.Name)
+            as.mu.Unlock()
+            continue
         }
 
 		id, err := result.LastInsertId()
 		if err != nil {
-			return err
+            fmt.Println("Error getting ID for Artist name: ", a.Name)
+            as.mu.Lock()
+            delete(as.artistMap, a.Name)
+            as.mu.Unlock()
+            continue
 		}
 
 		a.Id = id

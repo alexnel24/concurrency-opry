@@ -85,13 +85,21 @@ func (ps *PerformanceStore) InsertPerformancesToDb(db *sql.DB, newPerformances [
     for _, p := range newPerformances {
         result, err := stmt.Exec(p.EventLink, p.ArtistName, p.ComboString)
         if err != nil {
-            return err
+            fmt.Println("Error on Performance combo: ", p.ComboString)
+            ps.mu.Lock()
+            delete(ps.performanceMap, p.ComboString)
+            ps.mu.Unlock()
+            continue
         }
 
 		id, err := result.LastInsertId()
 		if err != nil {
-			return err
-		}
+            fmt.Println("Error getting ID for Performance combo: ", p.ComboString)
+            ps.mu.Lock()
+            delete(ps.performanceMap, p.ComboString)
+            ps.mu.Unlock()
+            continue
+        }
 
 		p.Id = id
     }
