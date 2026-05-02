@@ -18,7 +18,7 @@ type EventStore struct {
 func NewEventStore() *EventStore {
 	return &EventStore{
 		EventMap: make(map[string]*models.Event),
-		newEventsCh: make(chan *models.Event),
+		newEventsCh: make(chan *models.Event, 100),
 	}
 }
 
@@ -89,15 +89,22 @@ func (es *EventStore) InsertEventsToDb(db *sql.DB, newEvents []*models.Event) er
         result, err := stmt.Exec(e.Link, e.Title, e.Time, e.NoOfPerformers)
         if err != nil {
             fmt.Println("Error on Event link: ", e.Link)
-            return err
+            es.mu.Lock()
+            delete(es.EventMap, e.Link)
+            es.mu.Unlock()
+            continue
         }
-				
-		id, err := result.LastInsertId()
-		if err != nil {
-			return err
-		}
 
-		e.Id = id
+        id, err := result.LastInsertId()
+        if err != nil {
+            fmt.Println("Error getting ID for Event link: ", e.Link)
+            es.mu.Lock()
+            delete(es.EventMap, e.Link)
+            es.mu.Unlock()
+            continue
+        }
+
+        e.Id = id
     }
 
     return tx.Commit()
