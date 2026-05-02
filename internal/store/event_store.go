@@ -22,7 +22,7 @@ func NewEventStore() *EventStore {
 	}
 }
 
-func (es *EventStore) AddEvent(title, link string) *models.Event {
+func (es *EventStore) AddEvent(title, link string, t time.Time) *models.Event {
 	es.mu.Lock()
 	defer es.mu.Unlock()
 
@@ -30,11 +30,19 @@ func (es *EventStore) AddEvent(title, link string) *models.Event {
 		return event
 	}
 
-	event := models.NewEvent(title, link)
+	event := models.NewEvent(title, link, t)
 	es.EventMap[link] = event
 	es.newEventsCh <- event
 
 	return event
+}
+
+func (es *EventStore) UpdateEventTime(link string, t time.Time) {
+	es.mu.Lock()
+	defer es.mu.Unlock()
+	if event, exists := es.EventMap[link]; exists && event.Time.IsZero() {
+		event.Time = t
+	}
 }
 
 const eventQuery = `

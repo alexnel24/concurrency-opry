@@ -12,9 +12,8 @@ type Event struct {
 	NoOfPerformers	   int64
 }
 
-//ToDo: get the actual time at time of scrape (playwright vs colly)
-func NewEvent(title string, link string) *Event {
-	return &Event{Title: title, Link: link, Time: time.Now(), NoOfPerformers: 0}
+func NewEvent(title string, link string, t time.Time) *Event {
+	return &Event{Title: title, Link: link, Time: t, NoOfPerformers: 0}
 }
 
 func (e *Event) AddOnePerformer() {

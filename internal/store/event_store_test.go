@@ -31,7 +31,7 @@ func TestNewEventStore(t *testing.T) {
 
 func TestAddEvent_NewEvent(t *testing.T) {
 	es := NewEventStore()
-	event := es.AddEvent("Show Title", "https://opry.com/event/1")
+	event := es.AddEvent("Show Title", "https://opry.com/event/1", time.Time{})
 
 	assert.Equal(t, "Show Title", event.Title)
 	assert.Equal(t, "https://opry.com/event/1", event.Link)
@@ -43,8 +43,8 @@ func TestAddEvent_NewEvent(t *testing.T) {
 
 func TestAddEvent_TwoDistinctLinks(t *testing.T) {
 	es := NewEventStore()
-	es.AddEvent("Show One", "https://opry.com/event/1")
-	es.AddEvent("Show Two", "https://opry.com/event/2")
+	es.AddEvent("Show One", "https://opry.com/event/1", time.Time{})
+	es.AddEvent("Show Two", "https://opry.com/event/2", time.Time{})
 
 	assert.Len(t, es.EventMap, 2)
 	assert.Len(t, es.newEventsCh, 2)
@@ -52,8 +52,8 @@ func TestAddEvent_TwoDistinctLinks(t *testing.T) {
 
 func TestAddEvent_DuplicateLink(t *testing.T) {
 	es := NewEventStore()
-	first := es.AddEvent("Show Title", "https://opry.com/event/1")
-	second := es.AddEvent("Show Title", "https://opry.com/event/1")
+	first := es.AddEvent("Show Title", "https://opry.com/event/1", time.Time{})
+	second := es.AddEvent("Show Title", "https://opry.com/event/1", time.Time{})
 
 	assert.Same(t, first, second)
 	assert.Len(t, es.EventMap, 1)
@@ -94,8 +94,8 @@ func TestInsertEventsToDb_AllGood(t *testing.T) {
 	es := NewEventStore()
 
 	events := []*models.Event{
-		es.AddEvent("Show One", "https://opry.com/event/1"),
-		es.AddEvent("Show Two", "https://opry.com/event/2"),
+		es.AddEvent("Show One", "https://opry.com/event/1", time.Time{}),
+		es.AddEvent("Show Two", "https://opry.com/event/2", time.Time{}),
 	}
 	// drain channel
 	<-es.newEventsCh
@@ -121,9 +121,9 @@ func TestInsertEventsToDb_OneBadEvent(t *testing.T) {
 		"https://opry.com/event/bad", "Pre-existing")
 	require.NoError(t, err)
 
-	good1 := es.AddEvent("Good One", "https://opry.com/event/good1")
-	bad := es.AddEvent("Bad Event", "https://opry.com/event/bad")
-	good2 := es.AddEvent("Good Two", "https://opry.com/event/good2")
+	good1 := es.AddEvent("Good One", "https://opry.com/event/good1", time.Time{})
+	bad := es.AddEvent("Bad Event", "https://opry.com/event/bad", time.Time{})
+	good2 := es.AddEvent("Good Two", "https://opry.com/event/good2", time.Time{})
 	<-es.newEventsCh
 	<-es.newEventsCh
 	<-es.newEventsCh
@@ -152,9 +152,9 @@ func TestInsertEventsToDb_MultipleBadEvents(t *testing.T) {
 		"https://opry.com/event/bad2", "Pre-existing Two")
 	require.NoError(t, err)
 
-	good := es.AddEvent("Good Event", "https://opry.com/event/good")
-	bad1 := es.AddEvent("Bad One", "https://opry.com/event/bad1")
-	bad2 := es.AddEvent("Bad Two", "https://opry.com/event/bad2")
+	good := es.AddEvent("Good Event", "https://opry.com/event/good", time.Time{})
+	bad1 := es.AddEvent("Bad One", "https://opry.com/event/bad1", time.Time{})
+	bad2 := es.AddEvent("Bad Two", "https://opry.com/event/bad2", time.Time{})
 	<-es.newEventsCh
 	<-es.newEventsCh
 	<-es.newEventsCh
@@ -196,8 +196,8 @@ func TestInsertEventsToDb_AllBadEvents(t *testing.T) {
 		"https://opry.com/event/bad2", "Pre-existing Two")
 	require.NoError(t, err)
 
-	bad1 := es.AddEvent("Bad One", "https://opry.com/event/bad1")
-	bad2 := es.AddEvent("Bad Two", "https://opry.com/event/bad2")
+	bad1 := es.AddEvent("Bad One", "https://opry.com/event/bad1", time.Time{})
+	bad2 := es.AddEvent("Bad Two", "https://opry.com/event/bad2", time.Time{})
 	<-es.newEventsCh
 	<-es.newEventsCh
 

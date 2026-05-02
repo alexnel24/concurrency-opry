@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"OpryScrape/internal/models"
+	"OpryScrape/internal/parse"
 
 	"github.com/gocolly/colly"
 	"golang.org/x/sync/errgroup"
@@ -41,7 +42,8 @@ func (s *Scraper) ScrapeEvents(ctx context.Context, months []models.Month) error
 
 				c.OnHTML(".eventList__wrapper.list h3.title a", func(e *colly.HTMLElement) {
 					title := e.Text
-					s.stores.EventStore.AddEvent(title, e.Attr("href"))
+					link := e.Attr("href")
+					s.stores.EventStore.AddEvent(title, link, parse.ParseTimeFromLink(link))
 				})
 
 				err := c.Visit("https://www.opry.com/events/filtered/" + month.Year + "/" + month.MonthStr)
