@@ -173,6 +173,45 @@ func TestInsertEventsToDb_MultipleBadEvents(t *testing.T) {
 	assert.Equal(t, 1, count)
 }
 
+func TestInsertEventsToDb_EmptySlice(t *testing.T) {
+	db := setupTestDB(t)
+	es := NewEventStore()
+
+	err := es.InsertEventsToDb(db, []*models.Event{})
+	require.NoError(t, err)
+
+	var count int
+	require.NoError(t, db.QueryRow("SELECT COUNT(*) FROM events").Scan(&count))
+	assert.Equal(t, 0, count)
+}
+
+func TestInsertEventsToDb_AllBadEvents(t *testing.T) {
+	db := setupTestDB(t)
+	es := NewEventStore()
+
+	_, err := db.Exec(`INSERT INTO events (link, title, time, no_of_performers) VALUES (?, ?, datetime('now'), 0)`,
+		"https://opry.com/event/bad1", "Pre-existing One")
+	require.NoError(t, err)
+	_, err = db.Exec(`INSERT INTO events (link, title, time, no_of_performers) VALUES (?, ?, datetime('now'), 0)`,
+		"https://opry.com/event/bad2", "Pre-existing Two")
+	require.NoError(t, err)
+
+	bad1 := es.AddEvent("Bad One", "https://opry.com/event/bad1")
+	bad2 := es.AddEvent("Bad Two", "https://opry.com/event/bad2")
+	<-es.newEventsCh
+	<-es.newEventsCh
+
+	err = es.InsertEventsToDb(db, []*models.Event{bad1, bad2})
+	require.NoError(t, err)
+
+	assert.NotContains(t, es.EventMap, "https://opry.com/event/bad1")
+	assert.NotContains(t, es.EventMap, "https://opry.com/event/bad2")
+
+	var count int
+	require.NoError(t, db.QueryRow("SELECT COUNT(*) FROM events").Scan(&count))
+	assert.Equal(t, 2, count)
+}
+
 func TestLoadFromDB_SkipsBadTime(t *testing.T) {
 	db := setupTestDB(t)
 	now := time.Now().UTC().Truncate(time.Second)
