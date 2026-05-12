@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	// "OpryScrape/internal/models"
-	"OpryScrape/internal/store"
+	// "github.com/alexnel24/concurrency-opry/internal/models"
+	"github.com/alexnel24/concurrency-opry/internal/store"
 )
 
 type Scraper struct {

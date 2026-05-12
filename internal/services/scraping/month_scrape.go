@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 
-	"OpryScrape/internal/models"
+	"github.com/alexnel24/concurrency-opry/internal/models"
 
 	"github.com/gocolly/colly"
 )

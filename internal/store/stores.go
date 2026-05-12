@@ -1,7 +1,7 @@
 package store
 
 import (
-	"OpryScrape/internal/models"
+	"github.com/alexnel24/concurrency-opry/internal/models"
 	"context"
 	"database/sql"
 	"fmt"

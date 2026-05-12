@@ -3,7 +3,7 @@ package server
 import(
 	"net/http"
 
-	"OpryScrape/internal/handlers"
+	"github.com/alexnel24/concurrency-opry/internal/handlers"
 )
 
 func Routes(mux *http.ServeMux, h *handlers.Handler) http.Handler {

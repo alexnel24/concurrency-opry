@@ -7,11 +7,11 @@ import (
 	"os/signal"
 	"syscall"
 
-	app 	 "OpryScrape/internal/app"
-	database "OpryScrape/internal/db"
-	handlers "OpryScrape/internal/handlers"
-	scrape   "OpryScrape/internal/services/scraping"
-	store 	 "OpryScrape/internal/store"
+	app 	 "github.com/alexnel24/concurrency-opry/internal/app"
+	database "github.com/alexnel24/concurrency-opry/internal/db"
+	handlers "github.com/alexnel24/concurrency-opry/internal/handlers"
+	scrape   "github.com/alexnel24/concurrency-opry/internal/services/scraping"
+	store 	 "github.com/alexnel24/concurrency-opry/internal/store"
 )
 
 

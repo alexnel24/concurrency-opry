@@ -1,0 +1,8 @@
+# SQLite runtime files
+data/*.db-shm
+data/*.db-wal
+
+# Claude artifacts
+claude_session_summaries/
+claude-plans/
+.claude/settings.local.json

@@ -1,4 +1,4 @@
-module OpryScrape
+module github.com/alexnel24/concurrency-opry
 
 go 1.24.0
 

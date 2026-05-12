@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"sync"
 
-	"OpryScrape/internal/models"
+	"github.com/alexnel24/concurrency-opry/internal/models"
 )
 
 type ArtistStore struct {

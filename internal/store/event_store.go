@@ -6,7 +6,7 @@ import (
 	"sync"
 	"time"
 
-	"OpryScrape/internal/models"
+	"github.com/alexnel24/concurrency-opry/internal/models"
 )
 
 type EventStore struct {

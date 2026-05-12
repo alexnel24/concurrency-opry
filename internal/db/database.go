@@ -6,7 +6,7 @@ import (
 	_ "modernc.org/sqlite"
     "os"
 
-	"OpryScrape/internal/db/schema"
+	"github.com/alexnel24/concurrency-opry/internal/db/schema"
 )
 
 const defalutDbPath = "data/opry.db"

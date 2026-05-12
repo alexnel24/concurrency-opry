@@ -9,8 +9,8 @@ import (
 	"github.com/stretchr/testify/require"
 	_ "modernc.org/sqlite"
 
-	"OpryScrape/internal/db/schema"
-	"OpryScrape/internal/models"
+	"github.com/alexnel24/concurrency-opry/internal/db/schema"
+	"github.com/alexnel24/concurrency-opry/internal/models"
 )
 
 func setupPerformanceTestDB(t *testing.T) *sql.DB {

@@ -1,6 +1,6 @@
-OpryScrape
+ConcurrencyOpry
 
-Purpose(s) of this scraper:
+Purpose(s) of this application:
 1. Keep learning about Effective Go (specifically concurrency) and Software Engineering design principles
 2. Keep track of who is coming to the Opry so that I can watch for people of interest
 

@@ -1,8 +1,8 @@
 package handlers
 
 import (
-	"OpryScrape/internal/services/scraping"
-	"OpryScrape/internal/store"
+	"github.com/alexnel24/concurrency-opry/internal/services/scraping"
+	"github.com/alexnel24/concurrency-opry/internal/store"
 )
 
 type Handler struct {

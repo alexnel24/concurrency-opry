@@ -6,9 +6,9 @@ import (
 	"os"
 	"strconv"
 
-	"OpryScrape/internal/handlers"
-	"OpryScrape/internal/server"
-	"OpryScrape/internal/store"
+	"github.com/alexnel24/concurrency-opry/internal/handlers"
+	"github.com/alexnel24/concurrency-opry/internal/server"
+	"github.com/alexnel24/concurrency-opry/internal/store"
 )
 
 const defaultDbBatchSize = 100
