@@ -46,7 +46,7 @@ func (es *EventStore) UpdateEventTime(link string, t time.Time) {
 }
 
 const eventQuery = `
-        SELECT id, link, title, time, no_of_performers
+        SELECT id, link, title, time, no_of_performers, upcoming
         FROM events;
     `
 func (es *EventStore) LoadFromDB(db *sql.DB) error {
@@ -59,7 +59,7 @@ func (es *EventStore) LoadFromDB(db *sql.DB) error {
     for rows.Next() {
         var e models.Event
 		var timeStr string
-        if err := rows.Scan(&e.Id, &e.Link, &e.Title, &timeStr, &e.NoOfPerformers); err != nil {
+        if err := rows.Scan(&e.Id, &e.Link, &e.Title, &timeStr, &e.NoOfPerformers, &e.Upcoming); err != nil {
             return err
         }
 
@@ -77,8 +77,8 @@ func (es *EventStore) LoadFromDB(db *sql.DB) error {
 
 
 const eventInsert = `
-        INSERT INTO events (link, title, time, no_of_performers)
-        VALUES (?, ?, ?, ?)
+        INSERT INTO events (link, title, time, no_of_performers, upcoming)
+        VALUES (?, ?, ?, ?, ?)
     `
 func (es *EventStore) InsertEventsToDb(db *sql.DB, newEvents []*models.Event) error {
 	tx, err := db.Begin()
@@ -94,7 +94,7 @@ func (es *EventStore) InsertEventsToDb(db *sql.DB, newEvents []*models.Event) er
     defer stmt.Close()
 
     for _, e := range newEvents {
-        result, err := stmt.Exec(e.Link, e.Title, e.Time, e.NoOfPerformers)
+        result, err := stmt.Exec(e.Link, e.Title, e.Time, e.NoOfPerformers, e.Upcoming)
         if err != nil {
             fmt.Println("Error on Event link: ", e.Link)
             es.mu.Lock()
@@ -116,4 +116,49 @@ func (es *EventStore) InsertEventsToDb(db *sql.DB, newEvents []*models.Event) er
     }
 
     return tx.Commit()
+}
+
+func (es *EventStore) UpdatePastEventsInDb(db *sql.DB) error {
+	func() {
+		es.mu.Lock()
+		defer es.mu.Unlock()
+		for _, e := range es.EventMap {
+			if !e.Time.IsZero() && e.Time.Before(time.Now()) {
+				e.Upcoming = false
+			}
+		}
+	}()
+
+	_, err := db.Exec(`UPDATE events SET upcoming = false
+		WHERE upcoming = true
+		AND time != '0001-01-01T00:00:00Z'
+		AND time < datetime('now')`)
+	return err
+}
+
+func (es *EventStore) SyncEventTimesToDb(db *sql.DB) error {
+	candidates := func() []*models.Event {
+		es.mu.Lock()
+		defer es.mu.Unlock()
+		c := make([]*models.Event, 0)
+		for _, e := range es.EventMap {
+			if e.Id != 0 && !e.Time.IsZero() {
+				c = append(c, e)
+			}
+		}
+		return c
+	}()
+
+	stmt, err := db.Prepare(`UPDATE events SET time = ? WHERE id = ? AND time = '0001-01-01T00:00:00Z'`)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	for _, e := range candidates {
+		if _, err := stmt.Exec(e.Time, e.Id); err != nil {
+			fmt.Printf("Error syncing time for event id=%d: %s\n", e.Id, err.Error())
+		}
+	}
+	return nil
 }

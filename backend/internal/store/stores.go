@@ -150,3 +150,11 @@ func (s *Stores) FlushAllOutstandingToDb(){
 	s.FlushToDbCh <- struct{}{}
 }
 
+func (s *Stores) DB() *sql.DB {
+	return s.db
+}
+
+func (s *Stores) SyncEventTimesToDb() error {
+	return s.EventStore.SyncEventTimesToDb(s.db)
+}
+
