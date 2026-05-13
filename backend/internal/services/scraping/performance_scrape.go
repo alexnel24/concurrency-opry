@@ -32,9 +32,15 @@ func (s *Scraper) ScrapeArtistsAndPerformances(ctx context.Context) error {
 			})
 
 			if event.Time.IsZero() {
-				c.OnHTML("li", func(e *colly.HTMLElement) {
+				c.OnError(func(r *colly.Response, err error) {
+					fmt.Printf("[time-fallback] non-200 response for %s: status=%d err=%s\n", event.Link, r.StatusCode, err)
+				})
+				c.OnHTML("body", func(e *colly.HTMLElement) {
 					t := parse.ParseDateTimeFromText(e.Text)
-					if !t.IsZero() {
+					if t.IsZero() {
+						fmt.Printf("[time-fallback] regex failed on body text for %s\n", event.Link)
+					} else {
+						fmt.Printf("[time-fallback] found time %s for event: %s\n", t, event.Link)
 						s.stores.EventStore.UpdateEventTime(event.Link, t)
 					}
 				})

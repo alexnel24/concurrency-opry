@@ -16,7 +16,8 @@ var monthNames = map[string]time.Month{
 	"november": time.November, "december": time.December,
 }
 
-var textMonthDayPattern = regexp.MustCompile(`(?i)(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{1,2})`)
+// matches "Month D[D]" optionally preceded by a day-of-week like "Tuesday, "
+var textMonthDayPattern = regexp.MustCompile(`(?i)(?:(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),?\s+)?(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{1,2})`)
 var textTimePattern = regexp.MustCompile(`(?i)(\d{1,2}):(\d{2})\s*(AM|PM)`)
 
 func ParseTimeFromLink(link string) time.Time {
