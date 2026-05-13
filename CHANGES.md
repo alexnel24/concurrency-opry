@@ -2,6 +2,9 @@
 
 | Date | Commit | Message |
 |------|--------|---------|
+| 2026-05-13 | `62346fd` | Merge branch 'opry-9-track-upcoming' |
+| 2026-05-13 | `6f4a67c` | updating db to have new column, manual process done via claude, confirmed success |
+| 2026-05-13 | `dd14d6e` | update changes as well |
 | 2026-05-13 | `bc367d0` | fix bad time grab inside of performances |
 | 2026-05-12 | `00ca8af` | TypeScript dockerfile changes |
 | 2026-05-12 | `7b26095` | adding a base placeholder frontend (monorepo) |
