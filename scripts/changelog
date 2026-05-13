@@ -1,0 +1,11 @@
+#!/bin/sh
+
+OUTPUT="CHANGES.md"
+
+printf "# Changelog\n\n" > "$OUTPUT"
+printf "| Date | Commit | Message |\n" >> "$OUTPUT"
+printf "|------|--------|---------|\n" >> "$OUTPUT"
+
+git log master --format="| %ad | \`%h\` | %s |" --date=format:"%Y-%m-%d" >> "$OUTPUT"
+
+echo "Written to $OUTPUT"

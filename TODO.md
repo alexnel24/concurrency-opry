@@ -1,9 +1,8 @@
 # TODO
 
 ## Features
-- [ ] Add tests for ArtistStore and PerformanceStore
+- [ ] mark past vs upcoming (investigate performance vs event)
 - [ ] Add people-of-interest model + SQL queries to find wanted artists
-- [ ] Capture actual event date (playwright vs colly) and mark past vs upcoming
 - [ ] Build unit tests for scraping (mockery + fake Opry HTML)
 - [ ] Set up automatic scheduling (cron, like BasketballBubbleScraper)
 - [ ] Replace print statements with structured logging
@@ -12,7 +11,7 @@
 - [ ] Switch from SQLite to PostgreSQL (or another full SQL server)
 
 ## Bugs
-(currently no known bugs)
+- [ ] `NoOfPerformers` did not work on eventId 150; likely failing on other event IDs as well
 
 ## Open Questions
 - Deploy or keep local? (pipeline work, logging, cost)

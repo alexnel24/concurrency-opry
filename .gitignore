@@ -2,7 +2,12 @@
 data/*.db-shm
 data/*.db-wal
 
+# Frontend build artifacts
+frontend/node_modules/
+frontend/dist/
+
 # Claude artifacts
+CLAUDE.md
 claude_session_summaries/
 claude-plans/
 .claude/settings.local.json
