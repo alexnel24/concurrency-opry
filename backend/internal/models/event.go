@@ -10,10 +10,11 @@ type Event struct {
 	Title              string
 	Time               time.Time
 	NoOfPerformers	   int64
+	Upcoming           bool
 }
 
 func NewEvent(title string, link string, t time.Time) *Event {
-	return &Event{Title: title, Link: link, Time: t, NoOfPerformers: 0}
+	return &Event{Title: title, Link: link, Time: t, NoOfPerformers: 0, Upcoming: true}
 }
 
 func (e *Event) AddOnePerformer() {

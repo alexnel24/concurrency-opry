@@ -34,5 +34,10 @@ func (s *Scraper) ScrapeOpry(ctx context.Context, stores *store.Stores) (error) 
 	s.ScrapeArtistsAndPerformances(ctx)
 	fmt.Println("Done Scraping Artists and Performances")
 
+	s.stores.FlushAllOutstandingToDb()
+	if err := s.stores.SyncEventTimesToDb(); err != nil {
+		fmt.Println("Error syncing event times:", err)
+	}
+
 	return nil
 }
