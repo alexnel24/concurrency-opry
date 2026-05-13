@@ -2,6 +2,9 @@
 
 | Date | Commit | Message |
 |------|--------|---------|
+| 2026-05-13 | `bc367d0` | fix bad time grab inside of performances |
+| 2026-05-12 | `00ca8af` | TypeScript dockerfile changes |
+| 2026-05-12 | `7b26095` | adding a base placeholder frontend (monorepo) |
 | 2026-05-12 | `d480e3b` | rename project and init remote git |
 | 2026-05-02 | `27bd4bb` | Capture even time |
 | 2026-05-01 | `845d272` | finishing store tests |
