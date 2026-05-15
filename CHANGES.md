@@ -2,6 +2,8 @@
 
 | Date | Commit | Message |
 |------|--------|---------|
+| 2026-05-15 | `3585a30` | adding artist performances endpoint |
+| 2026-05-15 | `2a24e73` | forgot to update changes.md |
 | 2026-05-15 | `2686aa0` | Fix NoOfPerformers scraping process |
 | 2026-05-13 | `07fcecf` | Merge branch 'opry-9-track-upcoming' |
 | 2026-05-13 | `1b1c3ac` | add upcoming bool to event model |
