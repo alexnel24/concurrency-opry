@@ -8,6 +8,8 @@ import (
 
 	"github.com/alexnel24/concurrency-opry/internal/handlers"
 	"github.com/alexnel24/concurrency-opry/internal/server"
+	"github.com/alexnel24/concurrency-opry/internal/services/scraping"
+	"github.com/alexnel24/concurrency-opry/internal/session"
 	"github.com/alexnel24/concurrency-opry/internal/store"
 )
 
@@ -15,14 +17,16 @@ const defaultDbBatchSize = 100
 const defaultFlushSeconds = 120
 
 type App struct {
-	handler *handlers.Handler
-	stores  *store.Stores
+	handler        *handlers.Handler
+	stores         *store.Stores
+	sessionManager *session.SessionManager
 }
 
-func NewApp(handler *handlers.Handler, stores *store.Stores) *App {
+func NewApp(scraper *scraping.Scraper, stores *store.Stores, sessionManager *session.SessionManager) *App {
 	return &App{
-		handler: handler,
-		stores:  stores,
+		handler:        handlers.New(scraper, stores, sessionManager),
+		stores:         stores,
+		sessionManager: sessionManager,
 	}
 }
 
@@ -30,6 +34,7 @@ func (a *App) Run(ctx context.Context) {
 	batchSize := envInt("DB_BATCH_SIZE", defaultDbBatchSize)
 	flushDbEverySeconds := envInt("FLUSH_SECONDS", defaultFlushSeconds)
 
+	a.sessionManager.StartBackgroundSessionCleanup(ctx)
 	a.stores.StartBackgroundDBWorker(ctx, batchSize, flushDbEverySeconds)
 
 	mux := http.NewServeMux()
@@ -42,6 +47,7 @@ func (a *App) Run(ctx context.Context) {
 
 	server := server.New(":"+port, httpHandler)
 	server.Run(ctx)
+	a.stores.WaitForBackgroundDBWorkerToFlush()
 	//ToDo: Error handling
 }
 

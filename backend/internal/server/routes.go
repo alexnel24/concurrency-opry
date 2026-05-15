@@ -12,6 +12,7 @@ func Routes(mux *http.ServeMux, h *handlers.Handler) http.Handler {
 	mux.HandleFunc("/update-db", h.UpdateDB)
 	mux.HandleFunc("/mark-past-events", h.MarkPastEvents)
 	mux.HandleFunc("/artist-performances", h.ArtistPerformances)
+	mux.HandleFunc("/sessions", h.Sessions)
 
 	return mux
 }

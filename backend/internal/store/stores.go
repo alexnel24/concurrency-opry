@@ -5,6 +5,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"sync"
 	"time"
 )
 
@@ -13,7 +14,8 @@ type Stores struct {
 	EventStore       *EventStore
 	ArtistStore      *ArtistStore
 	PerformanceStore *PerformanceStore
-	FlushToDbCh		 chan struct{}
+	FlushToDbCh      chan struct{}
+	wg               sync.WaitGroup
 }
 
 func InitStores(db *sql.DB) *Stores {
@@ -36,8 +38,9 @@ func (s *Stores) loadFromDB() {
 }
 
 func (s *Stores) StartBackgroundDBWorker(ctx context.Context, batchSize, flushEverySeconds int) {
-	
+	s.wg.Add(1)
 	go func() {
+		defer s.wg.Done()
 		ticker := time.NewTicker(time.Duration(flushEverySeconds) * time.Second)
 		defer ticker.Stop()
 
@@ -148,6 +151,10 @@ func (s *Stores) StartBackgroundDBWorker(ctx context.Context, batchSize, flushEv
 
 func (s *Stores) FlushAllOutstandingToDb(){
 	s.FlushToDbCh <- struct{}{}
+}
+
+func (s *Stores) WaitForBackgroundDBWorkerToFlush() {
+	s.wg.Wait()
 }
 
 func (s *Stores) DB() *sql.DB {
