@@ -2,6 +2,10 @@
 
 | Date | Commit | Message |
 |------|--------|---------|
+| 2026-05-15 | `2686aa0` | Fix NoOfPerformers scraping process |
+| 2026-05-13 | `07fcecf` | Merge branch 'opry-9-track-upcoming' |
+| 2026-05-13 | `1b1c3ac` | add upcoming bool to event model |
+| 2026-05-13 | `2ff0c78` | more changes |
 | 2026-05-13 | `62346fd` | Merge branch 'opry-9-track-upcoming' |
 | 2026-05-13 | `6f4a67c` | updating db to have new column, manual process done via claude, confirmed success |
 | 2026-05-13 | `dd14d6e` | update changes as well |
