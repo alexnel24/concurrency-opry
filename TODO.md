@@ -12,6 +12,7 @@
 ## Bugs
 
 ## Open Questions
+- Investigate adding Foreign Key artist_id to performances model as primary identifier rather than name. Evaluate ordering risk: can performances be flushed to the DB before their artist exists? If so, enforce artist-before-performance ordering in the flush function.
 - Evaluate scrape order of operations: Sync functions after FlushToDb
 - Deploy or keep local? (pipeline work, logging, cost)
 - Multi-user support? (different wanted-artist lists per user)

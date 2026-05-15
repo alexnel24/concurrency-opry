@@ -40,6 +40,24 @@ func (ps *PerformanceStore) AddPerformance(artistName string, event *models.Even
 	return performance
 }
 
+func (ps *PerformanceStore) GetAllByArtists(artistNames []string) []*models.Performance {
+	ps.mu.Lock()
+	defer ps.mu.Unlock()
+
+	lookup := make(map[string]struct{}, len(artistNames))
+	for _, name := range artistNames {
+		lookup[name] = struct{}{}
+	}
+
+	results := make([]*models.Performance, 0)
+	for _, p := range ps.performanceMap {
+		if _, ok := lookup[p.ArtistName]; ok {
+			results = append(results, p)
+		}
+	}
+	return results
+}
+
 const performanceQuery = `
         SELECT id, event_link, artist_name, combo_string
         FROM performances;
