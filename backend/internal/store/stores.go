@@ -158,3 +158,7 @@ func (s *Stores) SyncEventTimesToDb() error {
 	return s.EventStore.SyncEventTimesToDb(s.db)
 }
 
+func (s *Stores) SyncNoOfPerformersToDb() error {
+	return s.EventStore.SyncNoOfPerformersToDb(s.db)
+}
+

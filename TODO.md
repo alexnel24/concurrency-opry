@@ -1,7 +1,6 @@
 # TODO
 
 ## Features
-- [ ] mark past vs upcoming (investigate performance vs event)
 - [ ] Add people-of-interest model + SQL queries to find wanted artists
 - [ ] Build unit tests for scraping (mockery + fake Opry HTML)
 - [ ] Set up automatic scheduling (cron, like BasketballBubbleScraper)
@@ -11,9 +10,9 @@
 - [ ] Switch from SQLite to PostgreSQL (or another full SQL server)
 
 ## Bugs
-- [ ] `NoOfPerformers` did not work on eventId 150; likely failing on other event IDs as well
 
 ## Open Questions
+- Evaluate scrape order of operations: Sync functions after FlushToDb
 - Deploy or keep local? (pipeline work, logging, cost)
 - Multi-user support? (different wanted-artist lists per user)
 - Use `Event.NoOfPerformers` to short-circuit scraping early?

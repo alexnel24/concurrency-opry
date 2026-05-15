@@ -129,10 +129,21 @@ func (es *EventStore) UpdatePastEventsInDb(db *sql.DB) error {
 		}
 	}()
 
-	_, err := db.Exec(`UPDATE events SET upcoming = false
-		WHERE upcoming = true
+	_, err := db.Exec(`UPDATE events SET upcoming = 0
+		WHERE upcoming = 1
 		AND time != '0001-01-01T00:00:00Z'
 		AND time < datetime('now')`)
+	return err
+}
+
+func (es *EventStore) SyncNoOfPerformersToDb(db *sql.DB) error {
+	_, err := db.Exec(`
+		UPDATE events
+		SET no_of_performers = (
+			SELECT COUNT(*) FROM performances WHERE event_link = events.link
+		)
+		WHERE upcoming = 1
+	`)
 	return err
 }
 

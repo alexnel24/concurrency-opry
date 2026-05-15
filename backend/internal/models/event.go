@@ -17,6 +17,3 @@ func NewEvent(title string, link string, t time.Time) *Event {
 	return &Event{Title: title, Link: link, Time: t, NoOfPerformers: 0, Upcoming: true}
 }
 
-func (e *Event) AddOnePerformer() {
-	e.NoOfPerformers += 1
-}

@@ -37,7 +37,6 @@ func TestAddPerformance_NewPerformance(t *testing.T) {
 	assert.Equal(t, "Brad Paisley", performance.ArtistName)
 	assert.Equal(t, "https://opry.com/event/1", performance.EventLink)
 	assert.Len(t, ps.performanceMap, 1)
-	assert.Equal(t, int64(1), event.NoOfPerformers)
 
 	received := <-ps.newPerformancesCh
 	assert.Equal(t, performance, received)
@@ -51,7 +50,6 @@ func TestAddPerformance_TwoDistinct(t *testing.T) {
 
 	assert.Len(t, ps.performanceMap, 2)
 	assert.Len(t, ps.newPerformancesCh, 2)
-	assert.Equal(t, int64(2), event.NoOfPerformers)
 }
 
 func TestAddPerformance_Duplicate(t *testing.T) {
@@ -63,7 +61,6 @@ func TestAddPerformance_Duplicate(t *testing.T) {
 	assert.Same(t, first, second)
 	assert.Len(t, ps.performanceMap, 1)
 	assert.Len(t, ps.newPerformancesCh, 1)
-	assert.Equal(t, int64(1), event.NoOfPerformers)
 }
 
 func TestPerformanceLoadFromDB_EmptyTable(t *testing.T) {

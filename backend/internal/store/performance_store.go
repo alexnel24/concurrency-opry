@@ -36,9 +36,7 @@ func (ps *PerformanceStore) AddPerformance(artistName string, event *models.Even
 	ps.performanceMap[performance.ComboString] = performance
 
 	ps.newPerformancesCh <- performance
-	
-	event.AddOnePerformer()
-	
+
 	return performance
 }
 

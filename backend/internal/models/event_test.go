@@ -17,9 +17,6 @@ func TestNewEvent(t *testing.T) {
 	assert.Equal(t, int64(0), eventA.NoOfPerformers)
 	assert.Equal(t, true, eventA.Upcoming)
 
-	eventA.AddOnePerformer()
-	assert.Equal(t, int64(1), eventA.NoOfPerformers)
-
 	testTitle = "Charity Concert"
 	testLink = "www.fakeurl.com/charity-concert"
 	eventB := NewEvent(testTitle, testLink, time.Time{})
