@@ -13,10 +13,13 @@ build - ./scripts/build
 server - ./scripts/server
 test - ./scripts/test
 
-Three Endpoints:
+Six Endpoints:
 /health - basic healthcheck
 /scrape - scrape the opry websites for new annouced performances, artists, and events. Updates DB at end
 /update-db - force an update to db
+/mark-past-events - mark events whose time has passed as no longer upcoming
+/artist-performances - return performances for one or more artists (?artist=, ?filter=all|upcoming|past)
+/sessions - POST creates a session; DELETE (X-Session-ID header) destroys it
 
 Database: SQLite
 Only allows one connection at a time. There is a background worker listening for new events, artists, and performances. The items are inserted to the db in batches. Both batch size and partial batches time limits are controlled via env vars 
@@ -25,13 +28,7 @@ Needed setup:
 An empty data/opry.db file is required
 
 Future Goals:
-1. Add the people of interest model and incorporate sql select statements to find the wanted artists
-2. Capture the date of the event (playwright vs colly) and mark past vs upcoming events
-3. Send a text to myself when artists of interest are found
-4. Testing - build out unit tests for scraping using mockery and fake values from Opry web page
-5. Setup to run automatically (cron as I've done in other personal project: BasketballBubbleScraper)
-6. Update any print statements to logs (i.e. implement and improve logging)
-7. Expand Error Handling throughout application
+See TODO.md
 
 Things still in question:
 1. Figure out if deploying is goal (Pipeline work, logging, cost)
@@ -46,6 +43,3 @@ Things I'm proud of:
 1. Concurrency
 2. Project Architecture
 3. SQLite db, tried to minimize duplication, utilized indexing
-
-Notes for Rockbot:
-Commenting: If you would like a sample of traditional commenting, I have provided it on internal/servcies/scraping/event_scrape.go
