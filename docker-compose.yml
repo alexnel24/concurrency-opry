@@ -1,8 +1,7 @@
 services:
   opryscrape:
     image: opryscrape/app
-    build:
-      context: ./backend
+    build: .
     ports:
     - 8080:8080
     environment:
@@ -13,20 +12,9 @@ services:
     volumes:
     - ./data:/app/data
 
-  frontend:
-    build:
-      context: ./frontend
-      target: dev
-    ports:
-      - "5173:5173"
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
-    command: npm run dev -- --host
-
   test:
     build:
-      context: ./backend
+      context: .
       target: build
     working_dir: /src
     command: go test ./... -v
