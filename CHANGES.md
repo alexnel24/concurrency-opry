@@ -2,6 +2,7 @@
 
 | Date | Commit | Message |
 |------|--------|---------|
+| 2026-05-28 | `9e330c2` | Update readme and 1 comment |
 | 2026-05-17 | `0f3b256` | Docker changes based on upgrade |
 | 2026-05-15 | `520a82e` | fixing db on remote |
 | 2026-05-15 | `c0217e6` | adding sessionManager and session endpoint |
