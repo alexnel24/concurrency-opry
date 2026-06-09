@@ -2,6 +2,8 @@
 
 | Date | Commit | Message |
 |------|--------|---------|
+| 2026-06-09 | `cb63ebf` | remove frontend component, keep as backend only for now |
+| 2026-06-09 | `88cb1e0` | get ready for env vars |
 | 2026-05-28 | `9e330c2` | Update readme and 1 comment |
 | 2026-05-17 | `0f3b256` | Docker changes based on upgrade |
 | 2026-05-15 | `520a82e` | fixing db on remote |
