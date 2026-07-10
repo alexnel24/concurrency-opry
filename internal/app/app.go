@@ -9,6 +9,7 @@ import (
 	"github.com/alexnel24/concurrency-opry/internal/handlers"
 	"github.com/alexnel24/concurrency-opry/internal/server"
 	"github.com/alexnel24/concurrency-opry/internal/services/scraping"
+	"github.com/alexnel24/concurrency-opry/internal/services/watchlist"
 	"github.com/alexnel24/concurrency-opry/internal/session"
 	"github.com/alexnel24/concurrency-opry/internal/store"
 )
@@ -22,9 +23,9 @@ type App struct {
 	sessionManager *session.SessionManager
 }
 
-func NewApp(scraper *scraping.Scraper, stores *store.Stores, sessionManager *session.SessionManager) *App {
+func NewApp(scraper *scraping.Scraper, watchlist *watchlist.Watchlist, stores *store.Stores, sessionManager *session.SessionManager) *App {
 	return &App{
-		handler:        handlers.New(scraper, stores, sessionManager),
+		handler:        handlers.New(scraper, watchlist, stores, sessionManager),
 		stores:         stores,
 		sessionManager: sessionManager,
 	}

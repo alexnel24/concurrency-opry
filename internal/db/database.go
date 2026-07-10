@@ -47,6 +47,7 @@ func applySchemas(db *sql.DB) {
         "Events":      schema.EventsSchema,
         "Artists":     schema.ArtistsSchema,
         "Performances": schema.PerformancesSchema,
+        "WatchedArtists": schema.WatchedArtistsSchema,
     }
 
     for name, sqlText := range schemas {

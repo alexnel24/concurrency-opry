@@ -21,6 +21,14 @@ func NewArtistStore() *ArtistStore {
 	}
 }
 
+func (as *ArtistStore) GetArtist(name string) (*models.Artist, bool) {
+	as.mu.Lock()
+	defer as.mu.Unlock()
+
+	artist, exists := as.artistMap[name]
+	return artist, exists
+}
+
 func (as *ArtistStore) AddArtist(name string) *models.Artist {
 	as.mu.Lock()
 	defer as.mu.Unlock()

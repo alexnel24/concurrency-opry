@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/alexnel24/concurrency-opry/internal/parse"
+	"github.com/alexnel24/concurrency-opry/internal/util/parse"
 
 	"github.com/gocolly/colly"
 	"golang.org/x/sync/errgroup"
