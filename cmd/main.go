@@ -12,7 +12,6 @@ import (
 	performancefinder "github.com/alexnel24/concurrency-opry/internal/services/performancefinder"
 	scrape            "github.com/alexnel24/concurrency-opry/internal/services/scraping"
 	watchlist         "github.com/alexnel24/concurrency-opry/internal/services/watchlist"
-	session           "github.com/alexnel24/concurrency-opry/internal/session"
 	store             "github.com/alexnel24/concurrency-opry/internal/store"
 )
 
@@ -29,9 +28,8 @@ func main() {
 	scraper := scrape.NewScraper(stores)
 	watchlistSvc := watchlist.NewWatchlist(stores)
 	performanceFinderSvc := performancefinder.NewPerformanceFinder(stores)
-	sessionManager := session.NewSessionManager()
 
-	app := app.NewApp(scraper, watchlistSvc, performanceFinderSvc, stores, sessionManager)
+	app := app.NewApp(scraper, watchlistSvc, performanceFinderSvc, stores)
 
 	app.Run(ctx)
 }

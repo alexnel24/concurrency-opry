@@ -11,7 +11,6 @@ import (
 	"github.com/alexnel24/concurrency-opry/internal/services/performancefinder"
 	"github.com/alexnel24/concurrency-opry/internal/services/scraping"
 	"github.com/alexnel24/concurrency-opry/internal/services/watchlist"
-	"github.com/alexnel24/concurrency-opry/internal/session"
 	"github.com/alexnel24/concurrency-opry/internal/store"
 )
 
@@ -19,16 +18,14 @@ const defaultDbBatchSize = 100
 const defaultFlushSeconds = 120
 
 type App struct {
-	handler        *handlers.Handler
-	stores         *store.Stores
-	sessionManager *session.SessionManager
+	handler *handlers.Handler
+	stores  *store.Stores
 }
 
-func NewApp(scraper *scraping.Scraper, watchlist *watchlist.Watchlist, performanceFinder *performancefinder.PerformanceFinder, stores *store.Stores, sessionManager *session.SessionManager) *App {
+func NewApp(scraper *scraping.Scraper, watchlist *watchlist.Watchlist, performanceFinder *performancefinder.PerformanceFinder, stores *store.Stores) *App {
 	return &App{
-		handler:        handlers.New(scraper, watchlist, performanceFinder, stores, sessionManager),
-		stores:         stores,
-		sessionManager: sessionManager,
+		handler: handlers.New(scraper, watchlist, performanceFinder, stores),
+		stores:  stores,
 	}
 }
 
@@ -36,7 +33,6 @@ func (a *App) Run(ctx context.Context) {
 	batchSize := envInt("DB_BATCH_SIZE", defaultDbBatchSize)
 	flushDbEverySeconds := envInt("FLUSH_SECONDS", defaultFlushSeconds)
 
-	a.sessionManager.StartBackgroundSessionCleanup(ctx)
 	a.stores.StartBackgroundDBWorker(ctx, batchSize, flushDbEverySeconds)
 
 	mux := http.NewServeMux()

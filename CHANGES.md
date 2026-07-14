@@ -2,6 +2,8 @@
 
 | Date | Commit | Message |
 |------|--------|---------|
+| 2026-07-13 | `226a110` | opry-14 watched artists |
+| 2026-07-10 | `b50cd20` | opry-14 push up WIP of list of desired artists, still need to implement new store |
 | 2026-06-09 | `cb63ebf` | remove frontend component, keep as backend only for now |
 | 2026-06-09 | `88cb1e0` | get ready for env vars |
 | 2026-05-28 | `9e330c2` | Update readme and 1 comment |
