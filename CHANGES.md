@@ -2,6 +2,8 @@
 
 | Date | Commit | Message |
 |------|--------|---------|
+| 2026-07-14 | `83428c3` | clean-up todo list |
+| 2026-07-14 | `f029804` | opry-15 remove session manager from the app |
 | 2026-07-13 | `226a110` | opry-14 watched artists |
 | 2026-07-10 | `b50cd20` | opry-14 push up WIP of list of desired artists, still need to implement new store |
 | 2026-06-09 | `cb63ebf` | remove frontend component, keep as backend only for now |
