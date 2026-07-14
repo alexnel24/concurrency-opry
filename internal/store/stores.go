@@ -14,6 +14,7 @@ type Stores struct {
 	EventStore       *EventStore
 	ArtistStore      *ArtistStore
 	PerformanceStore *PerformanceStore
+	WatchlistStore   *WatchlistStore
 	FlushToDbCh      chan struct{}
 	wg               sync.WaitGroup
 }
@@ -24,7 +25,8 @@ func InitStores(db *sql.DB) *Stores {
 		EventStore:       NewEventStore(),
 		ArtistStore:      NewArtistStore(),
 		PerformanceStore: NewPerformanceStore(),
-		FlushToDbCh:      make(chan struct{}),	
+		WatchlistStore:   NewWatchlistStore(),
+		FlushToDbCh:      make(chan struct{}),
 	}
 	store.loadFromDB()
 	return store

@@ -1,13 +1,16 @@
 # TODO
 
 ## Features
-- [ ] Add people-of-interest model + SQL queries to find wanted artists
 - [ ] Build unit tests for scraping (mockery + fake Opry HTML)
 - [ ] Set up automatic scheduling (cron, like BasketballBubbleScraper)
 - [ ] Replace print statements with structured logging
 - [ ] Expand error handling throughout
 - [ ] Enable SMS-based interaction — send texts when artists of interest are found, allow triggering scrapes via text
 - [ ] Switch from SQLite to PostgreSQL (or another full SQL server)
+
+## In Progress
+- [ ] Finish wiring the watchlist against performances to find upcoming performances for wanted artists (`GetWatchedArtistPerformances`/`resolveFuzzyMatch` still stubbed with TODOs in `internal/services/watchlist/watchlist.go`)
+- [ ] Update ArtistId when watched artist is found (backfill `watched_artists.artist_id` once a previously-unmatched entry resolves to a scraped artist)
 
 ## Bugs
 

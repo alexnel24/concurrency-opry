@@ -3,6 +3,7 @@ package store
 import (
 	"database/sql"
 	"fmt"
+	"strings"
 	"sync"
 
 	"github.com/alexnel24/concurrency-opry/internal/models"
@@ -40,22 +41,80 @@ func (ps *PerformanceStore) AddPerformance(artistName string, event *models.Even
 	return performance
 }
 
-func (ps *PerformanceStore) GetAllByArtists(artistNames []string) []*models.Performance {
-	ps.mu.Lock()
-	defer ps.mu.Unlock()
+const allArtistPerformancesQuery = `
+        SELECT id, event_link, artist_name, combo_string
+        FROM performances
+        WHERE artist_name IN (%s);
+    `
 
-	lookup := make(map[string]struct{}, len(artistNames))
-	for _, name := range artistNames {
-		lookup[name] = struct{}{}
+func (ps *PerformanceStore) GetAllArtistPerformances(db *sql.DB, artists []*models.Artist) ([]*models.Performance, error) {
+	if len(artists) == 0 {
+		return []*models.Performance{}, nil
 	}
 
-	results := make([]*models.Performance, 0)
-	for _, p := range ps.performanceMap {
-		if _, ok := lookup[p.ArtistName]; ok {
-			results = append(results, p)
+	args := make([]interface{}, len(artists))
+	for i, artist := range artists {
+		args[i] = artist.Name
+	}
+
+	placeholders := strings.TrimSuffix(strings.Repeat("?,", len(artists)), ",")
+	query := fmt.Sprintf(allArtistPerformancesQuery, placeholders)
+
+	rows, err := db.Query(query, args...)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	performances := make([]*models.Performance, 0)
+	for rows.Next() {
+		p := new(models.Performance)
+		if err := rows.Scan(&p.Id, &p.EventLink, &p.ArtistName, &p.ComboString); err != nil {
+			return nil, err
 		}
+		performances = append(performances, p)
 	}
-	return results
+
+	return performances, nil
+}
+
+const artistPerformancesByUpcomingQuery = `
+        SELECT p.id, p.event_link, p.artist_name, p.combo_string
+        FROM performances p
+        JOIN events e ON p.event_link = e.link
+        WHERE p.artist_name IN (%s) AND e.upcoming = ?;
+    `
+
+func (ps *PerformanceStore) GetArtistPerformancesByUpcoming(db *sql.DB, artists []*models.Artist, upcoming bool) ([]*models.Performance, error) {
+	if len(artists) == 0 {
+		return []*models.Performance{}, nil
+	}
+
+	args := make([]interface{}, 0, len(artists)+1)
+	for _, artist := range artists {
+		args = append(args, artist.Name)
+	}
+	args = append(args, upcoming)
+
+	placeholders := strings.TrimSuffix(strings.Repeat("?,", len(artists)), ",")
+	query := fmt.Sprintf(artistPerformancesByUpcomingQuery, placeholders)
+
+	rows, err := db.Query(query, args...)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	performances := make([]*models.Performance, 0)
+	for rows.Next() {
+		p := new(models.Performance)
+		if err := rows.Scan(&p.Id, &p.EventLink, &p.ArtistName, &p.ComboString); err != nil {
+			return nil, err
+		}
+		performances = append(performances, p)
+	}
+
+	return performances, nil
 }
 
 const performanceQuery = `

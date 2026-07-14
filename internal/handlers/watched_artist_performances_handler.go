@@ -7,13 +7,13 @@ import (
 	"time"
 
 	"github.com/alexnel24/concurrency-opry/internal/models"
+	"github.com/alexnel24/concurrency-opry/internal/util/ownerid"
 )
 
-func (h *Handler) ArtistPerformances(w http.ResponseWriter, r *http.Request) {
-	artists := r.URL.Query()["artist"]
-	if len(artists) == 0 {
-		w.WriteHeader(http.StatusBadRequest)
-		fmt.Fprintf(w, "missing required query param: artist")
+func (h *Handler) WatchedArtistPerformances(w http.ResponseWriter, r *http.Request) {
+	ownerId, err := ownerid.Parse(r.URL.Query().Get("ownerId"))
+	if err != nil {
+		writeBadRequest(w, "invalid ownerId value: must be an integer")
 		return
 	}
 
@@ -24,15 +24,14 @@ func (h *Handler) ArtistPerformances(w http.ResponseWriter, r *http.Request) {
 	switch filter {
 	case models.FilterAll, models.FilterUpcoming, models.FilterPast:
 	default:
-		w.WriteHeader(http.StatusBadRequest)
-		fmt.Fprintf(w, "invalid filter value: must be one of %s, %s, %s", models.FilterAll, models.FilterUpcoming, models.FilterPast)
+		writeBadRequest(w, fmt.Sprintf("invalid filter value: must be one of %s, %s, %s", models.FilterAll, models.FilterUpcoming, models.FilterPast))
 		return
 	}
 
-	performances, err := h.performanceFinder.FindArtistPerformances(artists, filter)
+	performances, err := h.watchlist.GetWatchedArtistPerformances(ownerId, filter)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprintf(w, "error finding artist performances: %s", err)
+		fmt.Fprintf(w, "error retrieving watched artist performances")
 		return
 	}
 
@@ -54,6 +53,6 @@ func (h *Handler) ArtistPerformances(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	if err := json.NewEncoder(w).Encode(resp); err != nil {
-		fmt.Println("error encoding artist performances response: ", err)
+		fmt.Println("error encoding watched artist performances response: ", err)
 	}
 }

@@ -14,6 +14,7 @@ func Routes(mux *http.ServeMux, h *handlers.Handler) http.Handler {
 	mux.HandleFunc("/artist-performances", h.ArtistPerformances)
 	mux.HandleFunc("/sessions", h.Sessions)
 	mux.HandleFunc("/watched-artists", h.WatchedArtists)
+	mux.HandleFunc("/watched-artist-performances", h.WatchedArtistPerformances)
 
 	return mux
 }

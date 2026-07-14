@@ -4,7 +4,6 @@ const WatchedArtistsSchema = `
 CREATE TABLE IF NOT EXISTS watched_artists (
     id INTEGER PRIMARY KEY,
     name TEXT NOT NULL,
-    match_type TEXT NOT NULL DEFAULT 'fuzzy',
     artist_id INTEGER,
     owner_id INTEGER,
 
